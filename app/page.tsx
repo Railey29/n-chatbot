@@ -6,21 +6,25 @@ import { useState } from "react";
 
 export default function Home() {
   const [essay, setEssay] = useState("");
+
   return (
     <>
-      <nav className="w-full">
+      {/* Navbar */}
+      <nav className="w-full fixed top-0 left-0 z-50 bg-white shadow-md">
         <Navbar />
       </nav>
-      <main className="flex flex-col md:flex-row gap-4 p-4">
+
+      {/* Main Content */}
+      <main className="pt-20 px-4 md:px-8 lg:px-16 flex flex-col md:flex-row gap-6">
         {/* Accordion Section */}
-        <div className="flex-1 w-full">
+        <section className="flex-1 w-full md:max-w-md">
           <Accordion onScrape={(result: string) => setEssay(result)} />
-        </div>
+        </section>
 
         {/* Display Section */}
-        <div className="flex-1 w-full">
+        <section className="flex-1 w-full">
           <DisplayInformation label="RESULT:" essay={essay} />
-        </div>
+        </section>
       </main>
     </>
   );
