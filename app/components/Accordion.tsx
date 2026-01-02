@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { saveHistory } from "../controller/historyController";
 
 interface AccordionProps {
   placeholder?: string;
@@ -25,6 +26,7 @@ export default function Accordion({
     }
     const data = await res.json();
     console.log("Scraped essay: ", data.essay);
+    await saveHistory(inputValue, data.essay);
     onScrape?.(data.essay); // "?" is optional to pass the data , but in this case pass the data on result , pass the essay data on scrape , then the result have a data of essay because it passed
     setInputValue("");
   };

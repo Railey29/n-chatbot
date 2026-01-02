@@ -1,3 +1,4 @@
+import { humanizeText } from "@/app/utils/humanize";
 import axios from "axios";
 import * as cheerio from "cheerio";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -31,18 +32,21 @@ export async function GET(req: Request) {
     $("p").each((_i, el) => {
       const text = $(el)
         .clone()
-        .find("a , span , sup , style , script") // filter the content and remove this html tags
+        .find("sup, script, style")
         .remove()
         .end()
         .text()
+        .replace(/\[\d+\]/g, "") // remove [1], [2]
+        .replace(/\s+/g, " ")
         .trim();
       if (text) paragraphs.push(text);
     });
 
     // join into one big text
     const rawText = paragraphs.join(" ");
+    const humanize = humanizeText(rawText);
 
-    return NextResponse.json({ essay: rawText });
+    return NextResponse.json({ essay: humanize });
   } catch (error) {
     return NextResponse.json({ error: "Failed to Scrape" }, { status: 502 });
   }

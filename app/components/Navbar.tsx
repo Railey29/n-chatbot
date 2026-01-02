@@ -20,6 +20,7 @@ export default function Navbar() {
       setLoading(false);
     }
   };
+
   const handleLogoutClick = async () => {
     try {
       await handleLogout();
@@ -28,6 +29,16 @@ export default function Navbar() {
       router.push("/");
     } catch (error) {
       alert(error);
+    }
+  };
+
+  const handleHistoryClick = () => {
+    if (user) {
+      // ✅ Logged in → go to history page
+      router.push("/history");
+    } else {
+      // ❌ Not logged in → go to register page
+      router.push("/register");
     }
   };
 
@@ -58,6 +69,9 @@ export default function Navbar() {
                   <span className="text-sm text-gray-600">{user.email}</span>
                 </li>
                 <li>
+                  <Button title="History" onNavigation={handleHistoryClick} />
+                </li>
+                <li>
                   <Button title="Logout" onNavigation={handleLogoutClick} />
                 </li>
               </>
@@ -69,6 +83,9 @@ export default function Navbar() {
                     title="Login"
                     onNavigation={() => router.push("/login")}
                   />
+                </li>
+                <li>
+                  <Button title="History" onNavigation={handleHistoryClick} />
                 </li>
               </>
             )}
