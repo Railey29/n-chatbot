@@ -34,10 +34,8 @@ export default function Navbar() {
 
   const handleHistoryClick = () => {
     if (user) {
-      // ✅ Logged in → go to history page
       router.push("/history");
     } else {
-      // ❌ Not logged in → go to register page
       router.push("/register");
     }
   };
@@ -47,27 +45,34 @@ export default function Navbar() {
   }, []);
 
   return (
-    <>
-      <div className="navbar bg-base-100 shadow-md p-0 m-0">
-        <div className="flex-1">
-          <img
-            src="/logo.png"
-            alt="logo"
-            className="h-20 p-3 ml-5 cursor-pointer"
-          />
-        </div>
-        <div className="flex-none mr-5 p-2">
-          <ul className="menu menu-horizontal px-1 gap-2">
+    <div className="navbar bg-base-100 shadow-md px-4">
+      {/* LOGO */}
+      <div className="flex-1">
+        <img
+          src="/logo.png"
+          alt="logo"
+          className="h-14 cursor-pointer"
+          onClick={() => router.push("/")}
+        />
+      </div>
+
+      {/* MOBILE MENU */}
+      <div className="flex-none lg:hidden">
+        <div className="dropdown dropdown-end">
+          <label tabIndex={0} className="btn btn-ghost">
+            ☰
+          </label>
+          <ul
+            tabIndex={0}
+            className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 gap-2"
+          >
             {loading ? (
               <li>
-                <span className="text-sm">Loading...</span>
+                <span>Loading...</span>
               </li>
             ) : user ? (
-              // User is logged in
               <>
-                <li>
-                  <span className="text-sm text-gray-600">{user.email}</span>
-                </li>
+                <li className="text-sm text-gray-600 px-2">{user.email}</li>
                 <li>
                   <Button title="History" onNavigation={handleHistoryClick} />
                 </li>
@@ -76,7 +81,6 @@ export default function Navbar() {
                 </li>
               </>
             ) : (
-              // User is not logged in
               <>
                 <li>
                   <Button
@@ -92,6 +96,41 @@ export default function Navbar() {
           </ul>
         </div>
       </div>
-    </>
+
+      {/* DESKTOP MENU */}
+      <div className="hidden lg:flex flex-none">
+        <ul className="menu menu-horizontal gap-2">
+          {loading ? (
+            <li>
+              <span className="text-sm">Loading...</span>
+            </li>
+          ) : user ? (
+            <>
+              <li>
+                <span className="text-sm text-gray-600">{user.email}</span>
+              </li>
+              <li>
+                <Button title="History" onNavigation={handleHistoryClick} />
+              </li>
+              <li>
+                <Button title="Logout" onNavigation={handleLogoutClick} />
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <Button
+                  title="Login"
+                  onNavigation={() => router.push("/login")}
+                />
+              </li>
+              <li>
+                <Button title="History" onNavigation={handleHistoryClick} />
+              </li>
+            </>
+          )}
+        </ul>
+      </div>
+    </div>
   );
 }
