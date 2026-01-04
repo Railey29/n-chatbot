@@ -1,44 +1,53 @@
 "use client";
-import React from "react";
+
+import React, { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
+import { useRouter } from "next/navigation";
 
-export default function ForgotPassword() {
-  const handleForgotPassword = async (e: React.FormEvent) => {
+export default function ResetPasswordPage() {
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
-    const form = e.target as HTMLFormElement;
-    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
-
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "http://localhost:3000/reset-password",
+    const { error } = await supabase.auth.updateUser({
+      password,
     });
+
+    setLoading(false);
 
     if (error) {
       alert(error.message);
     } else {
-      alert("Reset link sent to your email");
+      alert("Password successfully updated");
+      router.push("/login");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-gray-100">
       <form
-        onSubmit={handleForgotPassword}
+        onSubmit={handleResetPassword}
         className="w-full max-w-sm sm:max-w-md bg-white p-6 sm:p-8 rounded-xl shadow-lg space-y-5"
       >
         <h1 className="text-center text-xl sm:text-2xl font-semibold text-black">
-          Forgot Password
+          Reset Password
         </h1>
 
         <p className="text-center text-sm sm:text-base text-gray-600">
-          Enter your email to receive a password reset link.
+          Enter your new password below.
         </p>
 
         <input
-          name="email"
-          type="email"
-          placeholder="Email address"
+          type="password"
+          placeholder="New Password"
           required
+          minLength={8}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           className="
             w-full
             px-4 py-2.5
@@ -55,6 +64,7 @@ export default function ForgotPassword() {
 
         <button
           type="submit"
+          disabled={loading}
           className="
             w-full
             bg-black
@@ -63,9 +73,11 @@ export default function ForgotPassword() {
             rounded-md
             hover:bg-gray-800
             transition
+            disabled:opacity-50
+            disabled:cursor-not-allowed
           "
         >
-          Send Reset Link
+          {loading ? "Resetting..." : "Reset Password"}
         </button>
       </form>
     </div>

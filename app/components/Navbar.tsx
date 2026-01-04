@@ -36,7 +36,7 @@ export default function Navbar() {
     if (user) {
       router.push("/history");
     } else {
-      router.push("/register");
+      router.push("/login");
     }
   };
 
