@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link"; // ✅ Import Link
 import { getHistory } from "../lib/getHistory";
 
 export default function HistoryPage() {
@@ -22,6 +23,16 @@ export default function HistoryPage() {
           <p className="mt-2 text-sm sm:text-base text-gray-500">
             A record of all URLs you’ve scraped and summarized
           </p>
+        </div>
+
+        {/* ✅ Back Button */}
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="inline-block rounded-lg bg-blue-600 px-4 py-2 text-white font-medium shadow hover:bg-blue-700 transition"
+          >
+            ← Back to Home
+          </Link>
         </div>
 
         {/* Empty State */}
