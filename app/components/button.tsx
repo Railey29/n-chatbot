@@ -1,19 +1,25 @@
 import React from "react";
 
-interface buttonProps {
+interface ButtonProps {
   title: string;
   onNavigation?: () => void;
+  disabled?: boolean;
+  className?: string;
 }
 
-export default function Button({ title, onNavigation }: buttonProps) {
+export default function Button({
+  title,
+  onNavigation,
+  disabled = false,
+  className = "",
+}: ButtonProps) {
   return (
-    <>
-      <button
-        className="btn btn-outline btn-success ml-2"
-        onClick={onNavigation}
-      >
-        {title}
-      </button>
-    </>
+    <button
+      className={`px-4 py-2 rounded-lg font-medium shadow transition hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
+      onClick={onNavigation}
+      disabled={disabled}
+    >
+      {title}
+    </button>
   );
 }

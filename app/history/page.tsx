@@ -3,10 +3,22 @@
 import { useEffect, useState } from "react";
 import Link from "next/link"; // ✅ Import Link
 import { getHistory } from "../lib/getHistory";
+import { clearAllHistory } from "../utils/clearAllHistory";
+import { downloadHistoryPDF } from "../utils/downloadHistoryPDF";
+import Button from "../components/button";
 
 export default function HistoryPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [history, setHistory] = useState<any[]>([]);
+  const [cleaning, setCleaning] = useState(false);
+
+  const handleClear = async () => {
+    clearAllHistory(setHistory, setCleaning);
+  };
+
+  const handleDownloadPDF = async () => {
+    downloadHistoryPDF(history);
+  };
 
   useEffect(() => {
     getHistory().then(setHistory);
@@ -25,14 +37,31 @@ export default function HistoryPage() {
           </p>
         </div>
 
-        {/* ✅ Back Button */}
-        <div className="mb-6">
+        {/* Buttons */}
+        <div className="mb-6 flex flex-row gap-3">
+          {/* Back Button */}
           <Link
             href="/"
             className="inline-block rounded-lg bg-blue-600 px-4 py-2 text-white font-medium shadow hover:bg-blue-700 transition"
           >
             ← Back to Home
           </Link>
+
+          {/* Clear History */}
+          <Button
+            title={cleaning ? "Cleaning..." : "🗑 Clear History"}
+            onNavigation={handleClear}
+            disabled={cleaning}
+            className="bg-red-600 text-white hover:bg-red-700"
+          />
+
+          {/* Download PDF */}
+          <Button
+            title="📄 Download PDF"
+            onNavigation={handleDownloadPDF}
+            disabled={history.length === 0}
+            className="bg-green-600 text-white hover:bg-green-700"
+          />
         </div>
 
         {/* Empty State */}
